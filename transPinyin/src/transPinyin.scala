@@ -8,15 +8,22 @@ import scala.util.parsing.json.JSONObject
 /**
  * Created by skplanet on 2015-09-24.
  */
+import scala.collection.JavaConversions._
 object transPinyin {
   val pinTable = new TreeMap[String, String]
   val outFile = new PrintWriter("C:\\china11st.auto-complete.index")
   def main(args:Array[String]): Unit = {
-    for (line <- Source.fromFile("C:\\Users\\skplanet\\IdeaProjects\\pinyin\\transPinyin\\src\\pinyin_new").getLines()) {
+
+    val m = Source.fromFile("C:\\Users\\skplanet\\IdeaProjects\\pinyin\\transPinyin\\src\\pinyin_new").getLines().
+      map(_.split("\t")).
+      map(a => (a(0), a(1))).
+      toMap
+    new TreeMap[String, String](m)
+    /*for (line <- Source.fromFile("C:\\Users\\skplanet\\IdeaProjects\\pinyin\\transPinyin\\src\\pinyin_new").getLines()) {
       line.trim().split("\t") match {
         case Array(unicode, pin) => pinTable.put(unicode.toLowerCase(), pin.replace(":", ""))
       }
-    }
+    }*/
     val keyList = new ListBuffer[String]()
     for(line <- Source.fromFile("C:\\Users\\skplanet\\IdeaProjects\\pinyin\\transPinyin\\src\\china11st_ctg_tot.txt").getLines()) {
       val lineList = line.split("/")
